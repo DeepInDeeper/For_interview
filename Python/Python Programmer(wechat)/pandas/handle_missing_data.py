@@ -14,6 +14,7 @@ dataset = read_csv('pima-indians-diabetes.csv',header = None)
 dataset[[1,2,3,4,5]] = dataset[[1,2,3,4,5]].replace(0,numpy.NaN)
 
 dataset.dropna(inplace = True)
+# print (dataset.shape)
 
 values = dataset.values
 x = values[:,0:8]
@@ -21,7 +22,7 @@ y = values[:,8]
 
 model = LinearDiscriminantAnalysis()
 kfold = KFold(n_splits=3, random_state=7)
-result = cross_val_score(model, X, y, cv=kfold, scoring='accuracy')
+result = cross_val_score(model, x, y, cv=kfold, scoring='accuracy')
 print(result.mean())
 
 
