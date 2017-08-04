@@ -113,7 +113,7 @@ class Schelling:
 
     def plot(self, title, file_name):
         fig, ax = plt.subplots()
-        # 如果要进行超过 7 种颜色的仿真，你应该相应地进行设置
+        # 脠莽鹿没脪陋陆酶脨脨鲁卢鹿媒 7 脰脰脩脮脡芦碌脛路脗脮忙拢卢脛茫脫娄赂脙脧脿脫娄碌脴陆酶脨脨脡猫脰脙
         agent_colors = {1:'b', 2:'r', 3:'g', 4:'c', 5:'m', 6:'y', 7:'k'}
         for agent in self.agents:
             ax.scatter(agent[0]+0.5, agent[1]+0.5, color=agent_colors[self.agents[agent]])
@@ -126,23 +126,24 @@ class Schelling:
         plt.savefig(file_name)
 
 
-        
-schelling_1 = Schelling(50, 50, 0.3, 0.3, 500, 2)
+# width 50锛宧eight 50(count:2500 houses),0.2 (Empty house pro),0.3(Similarity threshold)
+# 500 (the number of iteration),2(Number of races)      
+schelling_1 = Schelling(70, 70, 0.2, 0.3, 500, 2)
 schelling_1.populate()
 
-schelling_2 = Schelling(50, 50, 0.3, 0.4, 500, 2)
+schelling_2 = Schelling(70, 70, 0.2, 0.4, 500, 2)
 schelling_2.populate()
 
-schelling_3 = Schelling(50, 50, 0.3, 0.5, 500, 2)
+schelling_3 = Schelling(70, 70, 0.2, 0.5, 500, 2)
 schelling_3.populate()
 
-schelling_4 = Schelling(50, 50, 0.3, 0.6, 500, 2)
+schelling_4 = Schelling(70, 70, 0.2, 0.6, 500, 2)
 schelling_4.populate()
 
-schelling_5 = Schelling(50, 50, 0.3, 0.7, 500, 2)
+schelling_5 = Schelling(70, 70, 0.2, 0.7, 500, 2)
 schelling_5.populate()
 
-schelling_6 = Schelling(500, 500, 0.3, 0.8, 500, 2)
+schelling_6 = Schelling(70, 70, 0.2, 0.8, 500, 2)
 schelling_6.populate()
 
 
@@ -164,10 +165,6 @@ schelling_4.plot('Schelling Model with 2 colors: Final State with Similarity Thr
 schelling_5.plot('Schelling Model with 2 colors: Final State with Similarity Threshold 70%', 'schelling_2_70_final.png')
 schelling_6.plot('Schelling Model with 2 colors: Final State with Similarity Threshold 80%', 'schelling_2_80_final.png')
 
-schelling_7 = Schelling(50, 50, 0.3, 0.9, 500, 2)
-schelling_7.populate()
-schelling_7.update()
-schelling_7.plot('Schelling Model with 2 colors: Final State with Similarity Threshold 90%', 'schelling_2_90_final.png')
 
 
 
