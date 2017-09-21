@@ -1,32 +1,37 @@
-
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 import scipy
 from PIL import Image
 from scipy import ndimage
-#from lr_utils import load_dataset
+from lr_utils import load_dataset
 
 # Example of a picture
 # index = 3
 # plt.imshow(train_set_x_orig[index])
 # print ("y = " + str(train_set_y[:, index]) +
 #        ", it's a '" + classes[np.squeeze(train_set_y[:, index])].decode("utf-8") + "' picture.")
-def init():
-    # Loading the data (cat/non-cat)
-    train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = load_dataset()
-    m_train = train_set_x_orig.shape[0]
-    m_test = test_set_x_orig.shape[0]
-    num_px = train_set_x_orig[0].shape[0]
 
-    print ("Number of training examples: m_train = " + str(m_train))
-    print ("Number of testing examples: m_test = " + str(m_test))
-    print ("Height/Width of each image: num_px = " + str(num_px))
-    print ("Each image is of size: (" + str(num_px) + ", " + str(num_px) + ", 3)")
-    print ("train_set_x shape: " + str(train_set_x_orig.shape))
-    print ("train_set_y shape: " + str(train_set_y.shape))
-    print ("test_set_x shape: " + str(test_set_x_orig.shape))
-    print ("test_set_y shape: " + str(test_set_y.shape))
+# Loading the data (cat/non-cat)
+train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = load_dataset()
+m_train = train_set_x_orig.shape[0]
+m_test = test_set_x_orig.shape[0]
+num_px = train_set_x_orig[0].shape[0]
+
+train_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0],-1).T
+test_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0],-1).T
+train_set_x = train_set_x_flatten/255.
+test_set_x = test_set_x_flatten/255.
+
+# print ("Number of training examples: m_train = " + str(m_train))
+# print ("Number of testing examples: m_test = " + str(m_test))
+# print ("Height/Width of each image: num_px = " + str(num_px))
+# print ("Each image is of size: (" + str(num_px) + ", " + str(num_px) + ", 3)")
+# print ("train_set_x shape: " + str(train_set_x_orig.shape))
+# print ("train_set_y shape: " + str(train_set_y.shape))
+# print ("test_set_x shape: " + str(test_set_x_orig.shape))
+# print ("test_set_y shape: " + str(test_set_y.shape))
 
 def sigmoid(z):
     s = 1.0/(1+np.exp(-z))
@@ -162,6 +167,51 @@ def predict(w, b, X):
     assert(Y_prediction.shape == (1, m))
     return Y_prediction
 
+def model(X_train, Y_train, X_test, Y_test, num_iterations = 2000, learning_rate = 0.5, print_cost = False):
+    """
+    Builds the logistic regression model by calling the function you've implemented previously
+
+    Arguments:
+    X_train -- training set represented by a numpy array of shape (num_px * num_px * 3, m_train)
+    Y_train -- training labels represented by a numpy array (vector) of shape (1, m_train)
+    X_test -- test set represented by a numpy array of shape (num_px * num_px * 3, m_test)
+    Y_test -- test labels represented by a numpy array (vector) of shape (1, m_test)
+    num_iterations -- hyperparameter representing the number of iterations to optimize the parameters
+    learning_rate -- hyperparameter representing the learning rate used in the update rule of optimize()
+    print_cost -- Set to true to print the cost every 100 iterations
+
+    Returns:
+    d -- dictionary containing information about the model.
+    """
+    dim = X_train.shape[0]
+    # initialize parameters with zeros
+    w, b = initialize_with_zeros(dim)
+
+    # Gradient descent
+    parameters, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
+
+    # Retrieve parameters w and b from dictionary "parameters"
+    w = parameters["w"]
+    b = parameters["b"]
+
+    # Predict test/train set examples
+    Y_prediction_test = predict(w, b, X_test)
+    Y_prediction_train = predict(w, b, X_train)
+
+    # Print train/test Errors
+    print("train accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100))
+    print("test accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100))
+
+    d = {"costs": costs,
+         "Y_prediction_test": Y_prediction_test,
+         "Y_prediction_train" : Y_prediction_train,
+         "w" : w,
+         "b" : b,
+         "learning_rate" : learning_rate,
+         "num_iterations": num_iterations}
+
+    return d
+
 def test():
     d = model(train_set_x, train_set_y, test_set_x, test_set_y,
               num_iterations=2000, learning_rate=0.005, print_cost=True)
@@ -173,20 +223,63 @@ def test():
     plt.title("Learning rate =" + str(d["learning_rate"]))
     plt.show()
 
-num_px = 64
+def test_diff():
+    learning_rates = [0.01, 0.001, 0.0001]
+    models = {}
+    for i in learning_rates:
+        print ("learning rate is: " + str(i))
+        models[str(i)] = model(train_set_x, train_set_y, test_set_x, test_set_y,
+                               num_iterations=1500, learning_rate=i,print_cost=False)
+        print ('\n' + "-------------------------------------------------------" + '\n')
+    for i in learning_rates:
+        plt.plot(np.squeeze(models[str(i)]["costs"]), label= str(models[str(i)]["learning_rate"]))
+
+    plt.ylabel('cost')
+    plt.xlabel('iterations')
+
+    legend = plt.legend(loc='upper center', shadow=True)
+    frame = legend.get_frame()
+    frame.set_facecolor('0.90')
+    plt.show()
+#num_px = 64
 b = -0.0159062439997
 W = np.loadtxt(open("data.csv"),delimiter=",",skiprows=0)
-W = reshape(W,64*64*3,1)
+W = np.reshape(W,64*64*3,1)
 print (W.shape)
-def fina_para():
-    my_image = "cat_in_iran.jpg"   # change this to the name of your image file
+
+def fina_para(image_name):
+    my_image = str(image_name)  # change this to the name of your image file
     # We preprocess the image to fit your algorithm.
     fname = "img/" + my_image
-    image = np.array(ndimage.imread(fname, flatten=False))
-    my_image = scipy.misc.imresize(image, size=(num_px,num_px)).reshape((1, num_px*num_px*3)).T
-    my_predicted_image = predict(d["w"], b, my_image)
+    if os.path.isfile(fname):
+        image = np.array(ndimage.imread(fname, flatten=False))
+        my_image = scipy.misc.imresize(image, size=(num_px,num_px)).reshape((1, num_px*num_px*3)).T
+        my_predicted_image = predict(W, b, my_image)
+        plt.imshow(image)
+        str_y = np.squeeze(my_predicted_image)
+        str_ju = classes[int(np.squeeze(my_predicted_image)),].decode("utf-8")
+        print("y = " + str(str_y) +
+              ", your algorithm predicts a \"" +
+              str_ju + "\" picture.")
+        plt.title('Y= %s,logistic_regression: %s' % (str_y,str_ju))
+        plt.show()
+    else:
+        print ("Files does not exists")
 
-    plt.imshow(image)
-    print("y = " + str(np.squeeze(my_predicted_image)) +
-          ", your algorithm predicts a \"" + classes[int(np.squeeze(my_predicted_image)),].decode("utf-8") +
-          "\" picture.")
+# # Example of a picture
+def show_pic():
+    index = 3
+    plt.imshow(train_set_x_orig[index])
+    plt.show()
+    print ("y = " + str(train_set_y[:, index]) +
+           ", it's a '" + classes[np.squeeze(train_set_y[:, index])].decode("utf-8") +  "' picture.")
+if __name__ == "__main__":
+    debug = 5
+    if debug == 1:
+        show_pic()
+    elif debug == 2:
+        test()
+    elif debug == 3:
+        test_diff()
+    else:
+        fina_para("1.jpg")
