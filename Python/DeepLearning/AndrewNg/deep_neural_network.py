@@ -4,13 +4,10 @@ import matplotlib.pyplot as plt
 from testCases_v3 import *
 from dnn_utils_v2 import sigmoid, sigmoid_backward, relu, relu_backward
 
-%matplotlib inline
-plt.rcParams['figure.figsize'] = (5.0, 4.0) # set default size of plots
+
+plt.rcParams['figure.figsize'] = (5.0, 4.0)  # set default size of plots
 plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
-
-%load_ext autoreload
-%autoreload 2
 
 np.random.seed(1)
 
@@ -209,7 +206,6 @@ def linear_activation_backward(dA, cache, activation):
     if activation == "relu":
         dZ = relu_backward(dA, activation_cache)
         dA_prev, dW, db = linear_backward(dZ, linear_cache)
-        ### END CODE HERE ###
 
     elif activation == "sigmoid":
         dZ = sigmoid_backward(dA, activation_cache)
