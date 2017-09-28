@@ -249,8 +249,8 @@ def nn_model(X, Y, n_h, num_iterations = 10000, print_cost=False):
 
 
         # Print the cost every 1000 iterations
-        # if print_cost and i % 1000 == 0:
-        #     print ("Cost after iteration %i: %f" %(i, cost))
+        if print_cost and i % 1000 == 0:
+            print ("Cost after iteration %i: %f" %(i, cost))
     return parameters
 
 def predict(parameters, X):

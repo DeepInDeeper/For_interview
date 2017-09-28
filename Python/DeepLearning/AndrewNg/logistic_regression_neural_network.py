@@ -167,7 +167,7 @@ def predict(w, b, X):
     assert(Y_prediction.shape == (1, m))
     return Y_prediction
 
-def model(X_train, Y_train, X_test, Y_test, num_iterations = 2000, learning_rate = 0.5, print_cost = False):
+def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0.5, print_cost=False):
     """
     Builds the logistic regression model by calling the function you've implemented previously
 
