@@ -1,4 +1,10 @@
-  
+ 
+>	 
+sudo apt-get update  
+sudo apt-get upgrade  
+#### some link 
+>
+
 [Guake Terminal](http://www.cnblogs.com/jerrybaby/p/6677013.html)  
 
 [Unity Tweak Tool](http://www.linuxidc.com/Linux/2016-05/130951.htm)  
