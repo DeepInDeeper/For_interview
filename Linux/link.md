@@ -2,6 +2,8 @@
 >	 
 sudo apt-get update  
 sudo apt-get upgrade  
+sudo gedit /boot/grub/grub.cfg   
+
 #### some link 
 >
 
@@ -13,3 +15,5 @@ sudo apt-get upgrade
 [install GIT](https://zhidao.baidu.com/question/749046563342548572.html)  
 
 [git store username](http://blog.csdn.net/zhengqijun_/article/details/63298202)  
+
+[Linux GPU](http://blog.csdn.net/zhaoyu106/article/details/52793183)  
