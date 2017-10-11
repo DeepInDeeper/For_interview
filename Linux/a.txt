@@ -1,0 +1,5 @@
+https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/   
+https://mirrors.tuna.tsinghua.edu.cn/help/tensorflow/  
+https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/  
+http://www.linuxidc.com/Linux/2016-11/137561.htm  
+https://developer.nvidia.com/cuda-80-download-archive  
