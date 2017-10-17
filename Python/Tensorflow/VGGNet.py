@@ -1,4 +1,5 @@
 # --* coding: UTF-8 *--
+# http://blog.csdn.net/superman_xxx/article/details/65063214
 # VGG通过反复堆叠3*3的小型卷积核和2*2的最大池化层，VGGNet成功的构建了16~19层深的卷积神经网络
 # VGGNet评测forward（inference）耗时和backward（training）耗时
 from datetime import datetime
@@ -127,7 +128,7 @@ def inference_op(input_op, keep_prob):
 
 
 ########评测函数########
-def time_tensorflow_run(session, target, feed, info_string): # 与AlexNet非常相似，session参数一点点区别
+def time_tensorflow_run(session, target, feed, info_string):  # 与AlexNet非常相似，session参数一点点区别
     num_steps_burn_in = 10
     total_duration = 0.0
     total_duration_squared = 0.0
