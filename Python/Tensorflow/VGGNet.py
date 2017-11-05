@@ -74,31 +74,32 @@ def inference_op(input_op, keep_prob):
     # 初始化参数列表p
     p = []
     # assume input_op shape is 224x224x3（第一个卷积层的输入input_op）
+    # 128
 
-    # 创建第一段卷积网络 -- outputs 112x112x64
+    # 创建第一段卷积网络 -- outputs 112x112x64 ->64*64*64
     # 两个卷积层的卷积核都是3*3，卷积核数量（输出通道数）均为64，步长1*1，全像素扫描。
     conv1_1 = conv_op(input_op, name="conv1_1", kh=3, kw=3, n_out=64, dh=1, dw=1, p=p)  # outputs 224x224x64
     conv1_2 = conv_op(conv1_1,  name="conv1_2", kh=3, kw=3, n_out=64, dh=1, dw=1, p=p)  # outputs 224x224x64
     pool1 = mpool_op(conv1_2,   name="pool1",   kh=2, kw=2, dw=2, dh=2)  # 标准的2*2的最大池化-outputs 112x112x64
 
-    # 创建第二段卷积网络 -- outputs 56x56x128
+    # 创建第二段卷积网络 -- outputs 56x56x128   -> 32*32*128
     conv2_1 = conv_op(pool1,    name="conv2_1", kh=3, kw=3, n_out=128, dh=1, dw=1, p=p)
     conv2_2 = conv_op(conv2_1,  name="conv2_2", kh=3, kw=3, n_out=128, dh=1, dw=1, p=p)
     pool2 = mpool_op(conv2_2,   name="pool2",   kh=2, kw=2, dh=2, dw=2)
 
-    # 创建第三段卷积网络 -- outputs 28x28x256
+    # 创建第三段卷积网络 -- outputs 28x28x256  -> 16*16*256
     conv3_1 = conv_op(pool2,    name="conv3_1", kh=3, kw=3, n_out=256, dh=1, dw=1, p=p)
     conv3_2 = conv_op(conv3_1,  name="conv3_2", kh=3, kw=3, n_out=256, dh=1, dw=1, p=p)
     conv3_3 = conv_op(conv3_2,  name="conv3_3", kh=3, kw=3, n_out=256, dh=1, dw=1, p=p)
     pool3 = mpool_op(conv3_3,   name="pool3",   kh=2, kw=2, dh=2, dw=2)
 
-    # 创建第四段卷积网络 -- outputs 14x14x512
+    # 创建第四段卷积网络 -- outputs 14x14x512 -> 8*8*512
     conv4_1 = conv_op(pool3,    name="conv4_1", kh=3, kw=3, n_out=512, dh=1, dw=1, p=p)
     conv4_2 = conv_op(conv4_1,  name="conv4_2", kh=3, kw=3, n_out=512, dh=1, dw=1, p=p)
     conv4_3 = conv_op(conv4_2,  name="conv4_3", kh=3, kw=3, n_out=512, dh=1, dw=1, p=p)
     pool4 = mpool_op(conv4_3,   name="pool4",   kh=2, kw=2, dh=2, dw=2)
 
-    # 创建第五段卷积网络 -- outputs 7x7x512
+    # 创建第五段卷积网络 -- outputs 7x7x512 -> 4*4*512
     conv5_1 = conv_op(pool4,    name="conv5_1", kh=3, kw=3, n_out=512, dh=1, dw=1, p=p)
     conv5_2 = conv_op(conv5_1,  name="conv5_2", kh=3, kw=3, n_out=512, dh=1, dw=1, p=p)
     conv5_3 = conv_op(conv5_2,  name="conv5_3", kh=3, kw=3, n_out=512, dh=1, dw=1, p=p)
@@ -111,7 +112,7 @@ def inference_op(input_op, keep_prob):
     shp = pool5.get_shape()
     flattened_shape = shp[1].value * shp[2].value * shp[3].value
 
-    # tf.reshape函数将每个样本化为长度7*7*512 = 25088的向量
+    # tf.reshape函数将每个样本化为长度7*7*512 = 25088的向量  ->8192
     resh1 = tf.reshape(pool5, [-1, flattened_shape], name="resh1")
 
     # fully connected 隐含节点4096的全连接层
