@@ -112,7 +112,7 @@ def inference_op(input_op, keep_prob):
     shp = pool5.get_shape()
     flattened_shape = shp[1].value * shp[2].value * shp[3].value
 
-    # tf.reshape函数将每个样本化为长度7*7*512 = 25088的向量  ->8192
+    # tf.reshape函数将每个样本化为长度7*7*512 = 25088的向量  
     resh1 = tf.reshape(pool5, [-1, flattened_shape], name="resh1")
 
     # fully connected 隐含节点4096的全连接层
