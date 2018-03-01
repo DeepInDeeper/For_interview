@@ -215,6 +215,7 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
 def test():
     d = model(train_set_x, train_set_y, test_set_x, test_set_y,
               num_iterations=2000, learning_rate=0.005, print_cost=True)
+    #print(train_set_x.shape,train_set_y.shape)
     # Plot learning curve (with costs)
     costs = np.squeeze(d['costs'])
     plt.plot(costs)
@@ -273,8 +274,10 @@ def show_pic():
     plt.show()
     print ("y = " + str(train_set_y[:, index]) +
            ", it's a '" + classes[np.squeeze(train_set_y[:, index])].decode("utf-8") +  "' picture.")
+
+
 if __name__ == "__main__":
-    debug = 5
+    debug = 3
     if debug == 1:
         show_pic()
     elif debug == 2:
